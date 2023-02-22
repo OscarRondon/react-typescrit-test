@@ -1,14 +1,15 @@
-import { useEffect, useState } from 'react'
 import './App.css'
+import { useEffect, useState } from 'react'
+import { Subs } from './interfaces/subs'
+import { List } from './components/List'
+import { SubForm } from './components/SubForm'
 
-interface Subs {
-  nick: string,
-  subMonths: number,
-  avatar: string,
-  description?: string
+
+interface AppStates {
+  subs: Subs[]
 }
 
-const INITIAL_STATE: Subs[] = [
+const INITIAL_STATE: AppStates['subs'] = [
   {
     nick: 'Oscar Rondon',
     subMonths: 18,
@@ -30,26 +31,17 @@ function App () {
     setSubs(INITIAL_STATE)
   }, [])
   
+  const handleNewSub = (newSub: Subs): void => {
+    setSubs(prevState => [...prevState, newSub])
+  }
+  
   return (
     <div className='App'>
       <h1> 
         First Web App React TypeScript!!!
       </h1>
-      <ul>
-        {
-          subs.map(sub => {
-            return (
-              <li
-                key={sub.nick}
-              >
-                <img src={sub.avatar} alt={sub.nick}/>
-                <h4>{sub.nick} <small>[{sub.subMonths}]</small></h4>
-                <p>{sub.description?.substring(0, 100)}</p>
-              </li>
-            )
-          })
-        }
-      </ul>
+      <List subs={subs} />
+      <SubForm onNewSub={handleNewSub}/>
     </div>
   )
 }
